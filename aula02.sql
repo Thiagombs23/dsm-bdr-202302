@@ -17,4 +17,4 @@ alter table  tbl_cliente add column idade integer[2];
 alter table  tbl_cliente add column cpf integer[15];
 alter table  tbl_emprestimo add column numero_emprestimo integer[15];
 alter table  tbl_emprestimo rename column cidade_agencia to endereco_agencia;
-create schema thiago
+create schema thiago;
