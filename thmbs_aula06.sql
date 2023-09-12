@@ -52,10 +52,26 @@ left join tbl_livros on tbl_titulo.codigo_titulo= tbl_livros.codigo_titulo
 where status='ALUGADO';
 
 --Liste os nomes dos clientes que não têm livros alugados
+select tbl_cliente.nome
+ from tbl_cliente
+left join tbl_emprestimo ON tbl_cliente.codigo_cliente=tbl_emprestimo.codigo_cliente
+where tbl_emprestimo.numero_emprestimo is null;
 
 --Liste os títulos e suas categorias dos livros disponiveis
+select tbl_titulo.nome,tbl_titulo.categoria
+from tbl_titulo
+inner join tbl_livros ON tbl_livros.codigo_titulo = tbl_titulo.codigo_titulo
+where tbl_livros.status = 'DISPONIVEL';
 
 --Liste os nomes dos clientes e os títulos dos livros que eles têm alugados
+select c.nome,t.titulo FROM tbl_cliente as c 
+left join tbl_emprestimo as e ON c.codigo_cliente = e.codigo_cliente
+left join tbl_titulo as t ON e.codigo_livro = t.codigo_titulo;
 
 
 --Retorne o nome, titulo do livro e o status do esmprestimo do livro alugado pela Ana Oliveira
+select C.nome,T.titulo,L.status from tbl_emprestimo as E 
+left join tbl_cliente as C ON C.codigo_cliente = E.codigo_cliente 
+inner join tbl_livros as L ON E.codigo_livro = L.cod_livro
+inner join tbl_titulo as T on T.codigo_titulo = L.codigo_titulo
+where C.nome = 'Ana Oliveira';
