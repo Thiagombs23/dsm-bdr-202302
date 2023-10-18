@@ -184,77 +184,84 @@ INSERT INTO tbl_empregados (nome, data_nascimento, endereco, sexo, salario, cod_
 --1 crie uma store procedure chamada proc_upd_nome_depart para atualizar o nome de um departamento. 
 --recebe como parametro um codigo inteiro e um novonome em texto atualizando o nome do departamento com esse respectivo codigo
 
-CREATE OR REPLACE FUNCTION proc_upd_nome_depart(
-    in_cod_departamento INT,
-    in_novonome TEXT
-)
-RETURNS VOID AS $$
+CREATE  PROCEDURE proc_upd_nome_depart(cod_departamento INT, novonome TEXT)
+LANGUAGE SQL
+AS $$
 BEGIN
     UPDATE tbl_departamentos
-    SET nome = in_novonome
-    WHERE cod_departamento = in_cod_departamento;
+    SET nome = novonome
+    WHERE cod_departamento = cod_departamento;
 END;
+$$;
 
 
 
 --2 crie uma store procedure chamada proc_copiatbl que cria uma copia da tabela tbl_cidades toda vez que for executada;
-CREATE OR REPLACE FUNCTION proc_copiatbl()
-RETURNS VOID AS $$
+
+CREATE OR REPLACE PROCEDURE proc_copiatbl()
+LANGUAGE SQL
+AS $$
 BEGIN
-    EXECUTE 'CREATE TABLE tbl_cidades_copia AS TABLE tbl_cidades';
+    CREATE TABLE IF NOT EXISTS tbl_cidades_copia AS SELECT * FROM tbl_cidades;
 END;
+$$;
 
 
 
 --3 crie uma store procedure chamada proc_novoprojeto que adiciona um novo projeto na tabela tbl_projetos
 --recebe como parametros o nome do projeto e o codigo do departamento
-CREATE OR REPLACE FUNCTION proc_novoprojeto(
-    in_nome_projeto TEXT,
-    in_cod_departamento INT
-)
-RETURNS VOID AS $$
+
+CREATE OR REPLACE PROCEDURE proc_novoprojeto(nome_projeto TEXT, cod_departamento INT)
+LANGUAGE SQL
+AS $$
 BEGIN
-    INSERT INTO tbl_projetos (nome, cod_departamento)
-    VALUES (in_nome_projeto, in_cod_departamento);
+    INSERT INTO tbl_projetos (nome, cod_departamento) VALUES (nome_projeto, cod_departamento);
 END;
+$$;
+
 
 
 
 --4 crie uma store procedure chamada proc_delprojeto que deleta um projeto da tbl_projetos
 -- recebe como parametro o codigo do projeto
-CREATE OR REPLACE FUNCTION proc_delprojeto(
-    in_cod_projeto INT
-)
-RETURNS VOID AS $$
+
+CREATE OR REPLACE PROCEDURE proc_delprojeto(cod_projeto INT)
+LANGUAGE SQL
+AS $$
 BEGIN
     DELETE FROM tbl_projetos
-    WHERE cod_projeto = in_cod_projeto;
+    WHERE cod_projeto = cod_projeto;
 END;
+$$;
+
 
 
 
 --5 crie uma store procedure chamada proc_projeto_arquivado que recebe o codigo de um projeto.
 --a procedure devera criar uma tabela chamada tbl_projetos_arquivados, caso ela nao exista. tabela deve ter 2 colunas: codigo_projeto e nome.
 --a procedure deve salvar o projeto do codigo recebido na tbl_projetos_arquivados e deleta-la da tabela tbl_projetos.
-CREATE OR REPLACE FUNCTION proc_projeto_arquivado(
-    in_cod_projeto INT
-)
-RETURNS VOID AS $$
+
+
+CREATE OR REPLACE PROCEDURE proc_projeto_arquivado(cod_projeto INT)
+LANGUAGE SQL
+AS $$
 BEGIN
-    -- Cria a tabela tbl_projetos_arquivados se ela não existir
+   
     CREATE TABLE IF NOT EXISTS tbl_projetos_arquivados (
-        codigo_projeto INT,
+        codigo_projeto SERIAL PRIMARY KEY,
         nome TEXT
     );
 
-    -- Insere o projeto arquivado na tabela tbl_projetos_arquivados
-    INSERT INTO tbl_projetos_arquivados (codigo_projeto, nome)
-    SELECT cod_projeto, nome
+    
+    INSERT INTO tbl_projetos_arquivados (nome)
+    SELECT nome
     FROM tbl_projetos
-    WHERE cod_projeto = in_cod_projeto;
+    WHERE cod_projeto = cod_projeto;
 
-    -- Remove o projeto da tabela tbl_projetos
+    -- Remove o projeto da tabela de projetos
     DELETE FROM tbl_projetos
-    WHERE cod_projeto = in_cod_projeto;
+    WHERE cod_projeto = cod_projeto;
 END;
+$$;
+
 
