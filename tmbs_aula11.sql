@@ -194,7 +194,7 @@ BEGIN
     SET nome = in_novonome
     WHERE cod_departamento = in_cod_departamento;
 END;
-$$ LANGUAGE plpgsql;
+
 
 
 --2 crie uma store procedure chamada proc_copiatbl que cria uma copia da tabela tbl_cidades toda vez que for executada;
@@ -203,7 +203,7 @@ RETURNS VOID AS $$
 BEGIN
     EXECUTE 'CREATE TABLE tbl_cidades_copia AS TABLE tbl_cidades';
 END;
-$$ LANGUAGE plpgsql;
+
 
 
 --3 crie uma store procedure chamada proc_novoprojeto que adiciona um novo projeto na tabela tbl_projetos
@@ -217,7 +217,7 @@ BEGIN
     INSERT INTO tbl_projetos (nome, cod_departamento)
     VALUES (in_nome_projeto, in_cod_departamento);
 END;
-$$ LANGUAGE plpgsql;
+
 
 
 --4 crie uma store procedure chamada proc_delprojeto que deleta um projeto da tbl_projetos
@@ -230,7 +230,7 @@ BEGIN
     DELETE FROM tbl_projetos
     WHERE cod_projeto = in_cod_projeto;
 END;
-$$ LANGUAGE plpgsql;
+
 
 
 --5 crie uma store procedure chamada proc_projeto_arquivado que recebe o codigo de um projeto.
@@ -257,4 +257,4 @@ BEGIN
     DELETE FROM tbl_projetos
     WHERE cod_projeto = in_cod_projeto;
 END;
-$$ LANGUAGE plpgsql;
+
