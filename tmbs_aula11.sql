@@ -185,12 +185,13 @@ INSERT INTO tbl_empregados (nome, data_nascimento, endereco, sexo, salario, cod_
 --recebe como parametro um codigo inteiro e um novonome em texto atualizando o nome do departamento com esse respectivo codigo
 
 CREATE  PROCEDURE proc_upd_nome_depart(cod_departamento INT, novonome TEXT)
-LANGUAGE SQL
+LANGUAGE PLPGSQL
 AS $$
 BEGIN
     UPDATE tbl_departamentos
     SET nome = novonome
     WHERE cod_departamento = cod_departamento;
+COMMIT;
 END;
 $$;
 
@@ -199,10 +200,11 @@ $$;
 --2 crie uma store procedure chamada proc_copiatbl que cria uma copia da tabela tbl_cidades toda vez que for executada;
 
 CREATE OR REPLACE PROCEDURE proc_copiatbl()
-LANGUAGE SQL
+LANGUAGE PLPGSQL
 AS $$
 BEGIN
     CREATE TABLE IF NOT EXISTS tbl_cidades_copia AS SELECT * FROM tbl_cidades;
+COMMIT;
 END;
 $$;
 
@@ -212,10 +214,11 @@ $$;
 --recebe como parametros o nome do projeto e o codigo do departamento
 
 CREATE OR REPLACE PROCEDURE proc_novoprojeto(nome_projeto TEXT, cod_departamento INT)
-LANGUAGE SQL
+LANGUAGE PLPGSQL
 AS $$
 BEGIN
     INSERT INTO tbl_projetos (nome, cod_departamento) VALUES (nome_projeto, cod_departamento);
+COMMIT;
 END;
 $$;
 
@@ -226,11 +229,12 @@ $$;
 -- recebe como parametro o codigo do projeto
 
 CREATE OR REPLACE PROCEDURE proc_delprojeto(cod_projeto INT)
-LANGUAGE SQL
+LANGUAGE PLPGSQL
 AS $$
 BEGIN
     DELETE FROM tbl_projetos
     WHERE cod_projeto = cod_projeto;
+COMMIT;
 END;
 $$;
 
@@ -243,7 +247,7 @@ $$;
 
 
 CREATE OR REPLACE PROCEDURE proc_projeto_arquivado(cod_projeto INT)
-LANGUAGE SQL
+LANGUAGE PLPGSQL
 AS $$
 BEGIN
    
@@ -258,9 +262,10 @@ BEGIN
     FROM tbl_projetos
     WHERE cod_projeto = cod_projeto;
 
-    -- Remove o projeto da tabela de projetos
+    
     DELETE FROM tbl_projetos
     WHERE cod_projeto = cod_projeto;
+COMMIT;
 END;
 $$;
 
